@@ -2,17 +2,7 @@ import React from 'react';
 
 export default function DetailSidePanel({ selectedStudent, attendanceHistory, onClose }) {
   if (!selectedStudent) {
-    return (
-      <div className="side-panel">
-        <div className="empty-state" style={{ padding: 'var(--space-24) var(--space-12)' }}>
-          <div className="empty-icon" style={{ fontSize: '32px' }}>👤</div>
-          <h3 className="empty-title">Select a Student</h3>
-          <p className="empty-description" style={{ fontSize: '12px' }}>
-            Click on a student to view details
-          </p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const recentHistory = (attendanceHistory[selectedStudent.id] || []).slice(0, 5);
