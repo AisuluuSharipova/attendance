@@ -17,6 +17,7 @@ public interface AttendanceMapper {
     @Mapping(target = "status", expression = "java(attendance.getStatus().name())")
     AttendanceDto toDto(Attendance attendance);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "student", ignore = true)
     @Mapping(target = "teacher", ignore = true)
     @Mapping(target = "status", ignore = true)

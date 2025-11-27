@@ -24,6 +24,13 @@ public interface StudentMapper {
     @Mapping(target = "pkgName", source = "pkg.name")
     StudentDetailDto toDetailDto(Student student);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "pkg", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     Student toEntity(CreateStudentDto dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "pkg", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     Student toEntity(UpdateStudentDto dto);
 }
