@@ -40,6 +40,7 @@ public class Pkg {
     private BigDecimal price;
 
     /** Активность пакета — менеджер видит только активные пакеты */
+    @Builder.Default
     @Column(nullable = false)
     private Boolean isActive = true;
 }
