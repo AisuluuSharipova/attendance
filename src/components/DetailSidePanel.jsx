@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function DetailSidePanel({ selectedStudent, attendanceHistory }) {
+export default function DetailSidePanel({ selectedStudent, attendanceHistory, onClose }) {
   if (!selectedStudent) {
     return (
       <div className="side-panel">
@@ -41,6 +41,33 @@ export default function DetailSidePanel({ selectedStudent, attendanceHistory }) 
 
   return (
     <div className="side-panel">
+      {/* Close Button */}
+      {onClose && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 'var(--space-12)' }}>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+              padding: '4px 8px',
+              color: 'var(--gray-500)',
+              transition: 'color var(--transition-base)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onMouseEnter={(e) => e.target.style.color = 'var(--gray-900)'}
+            onMouseLeave={(e) => e.target.style.color = 'var(--gray-500)'}
+            title="Close panel"
+            aria-label="Close detail panel"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Student Header */}
       <div style={{ marginBottom: 'var(--space-24)', paddingBottom: 'var(--space-20)', borderBottom: '1px solid var(--gray-100)' }}>
         <div

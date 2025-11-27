@@ -172,7 +172,11 @@ export default function AttendanceDashboard() {
         />
 
         {/* Side Panel */}
-        <DetailSidePanel selectedStudent={selectedStudent} attendanceHistory={attendanceHistory} />
+        <DetailSidePanel 
+          selectedStudent={selectedStudent} 
+          attendanceHistory={attendanceHistory}
+          onClose={() => setSelectedStudent(null)}
+        />
       </div>
 
       {/* Mobile Card View */}
