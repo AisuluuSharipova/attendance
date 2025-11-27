@@ -43,6 +43,8 @@ public class Student {
      * Сколько уроков осталось у студента. Каждый проведённый урок уменьшает это поле на 1.
      * При назначении пакета менеджер обычно устанавливает lessonsRemaining = pkg.lessonsCount.
      */
+
+    @Builder.Default
     @Column(nullable = false)
     private Integer lessonsRemaining = 0;
 
