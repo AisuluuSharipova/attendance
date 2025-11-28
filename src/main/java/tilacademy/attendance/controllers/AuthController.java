@@ -89,7 +89,7 @@ public class AuthController {
         if (username == null || username.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("error", "username is required"));
         }
-        userRepository.findByUsername(username).ifPresent(user -> refreshTokenService.deleteByUserId(user));
+        userRepository.findByUsername(username).ifPresent(user -> refreshTokenService.deleteByUser(user));
         return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
     }
 
