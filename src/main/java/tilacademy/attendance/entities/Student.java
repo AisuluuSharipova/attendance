@@ -39,6 +39,10 @@ public class Student {
     @JoinColumn(name = "package_id")
     private Pkg pkg;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
+
     /**
      * Сколько уроков осталось у студента. Каждый проведённый урок уменьшает это поле на 1.
      * При назначении пакета менеджер обычно устанавливает lessonsRemaining = pkg.lessonsCount.

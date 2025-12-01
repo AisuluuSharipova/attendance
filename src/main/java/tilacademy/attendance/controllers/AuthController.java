@@ -8,18 +8,22 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import tilacademy.attendance.dto.UserProfileDto;
 import tilacademy.attendance.dto.auth.LoginRequest;
 import tilacademy.attendance.dto.auth.LoginResponse;
 import tilacademy.attendance.dto.auth.TokenRefreshRequest;
 import tilacademy.attendance.dto.auth.TokenRefreshResponse;
 import tilacademy.attendance.dto.auth.MeResponse;
 import tilacademy.attendance.entities.RefreshToken;
+import tilacademy.attendance.entities.Teacher;
 import tilacademy.attendance.entities.User;
 import tilacademy.attendance.repositories.UserRepository;
+import tilacademy.attendance.repositories.TeacherRepository;
 import tilacademy.attendance.security.JwtService;
 import tilacademy.attendance.services.RefreshTokenService;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,17 +34,20 @@ public class AuthController {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final UserRepository userRepository;
+    private final TeacherRepository teacherRepository;
 
     public AuthController(AuthenticationManager authManager,
                           UserDetailsService userDetailsService,
                           JwtService jwtService,
                           RefreshTokenService refreshTokenService,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          TeacherRepository teacherRepository) {
         this.authManager = authManager;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @PostMapping("/login")
@@ -94,18 +101,40 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> me(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unauthenticated"));
+    public ResponseEntity<UserProfileDto> me(Authentication auth) {
+        if (auth == null) {
+            return ResponseEntity.status(401).build();
         }
 
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "User not found"));
+        // username of logged-in user
+        String username = auth.getName();
+
+        // Load User
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Find teacher by user_id
+        Optional<Teacher> teacherOpt = teacherRepository.findByUserId(user.getId());
+
+        Long teacherId = null;
+        String teacherName = null;
+
+        if (teacherOpt.isPresent()) {
+            Teacher teacher = teacherOpt.get();
+            teacherId = teacher.getId();
+            teacherName = teacher.getFullName();
         }
 
-        MeResponse resp = new MeResponse(user.getId(), user.getUsername(), user.getRole().name(), user.isEnabled());
-        return ResponseEntity.ok(resp);
+        UserProfileDto dto = new UserProfileDto(
+                user.getId(),
+                user.getUsername(),
+                user.getRole().name(),
+                user.isEnabled(),
+                teacherId,
+                teacherName
+        );
+
+        return ResponseEntity.ok(dto);
     }
+
 }

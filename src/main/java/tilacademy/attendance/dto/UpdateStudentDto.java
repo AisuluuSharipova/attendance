@@ -22,5 +22,7 @@ public record UpdateStudentDto(
         @Min(value = 0, message = "lessonsRemaining must be >= 0")
         Integer lessonsRemaining,
 
-        Long pkgId
+        Long pkgId,
+
+        Long teacherId
 ) {}

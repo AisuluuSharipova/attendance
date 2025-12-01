@@ -2,11 +2,15 @@ package tilacademy.attendance.entities;
 
 import jakarta.persistence.*;
 import tilacademy.attendance.entities.Role;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -25,6 +29,10 @@ public class User {
 
     @Column(nullable = false)
     private boolean enabled = true;
+
+    // необязательное поле — обратная сторона OneToOne
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Teacher teacher;
 
     public User() {}
 

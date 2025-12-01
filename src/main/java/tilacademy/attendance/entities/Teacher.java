@@ -12,8 +12,9 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Builder
 public class Teacher {
+
+    // id будет общим с User.id — поэтому без @GeneratedValue
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -27,9 +28,14 @@ public class Teacher {
 
     private String phone;
 
-    /** createdAt сохраняется только для Teacher */
     @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;
+
+    // OneToOne с общим PK
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "user_id") // user_id — FK и одновременно PK
+    private User user;
 
     @PrePersist
     protected void onCreate() {

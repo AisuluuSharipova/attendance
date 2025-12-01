@@ -11,6 +11,7 @@ public interface StudentService {
     Student create(Student student);
     Student update(Long id, Student student);
     void delete(Long id);
+    List<Student> findByTeacherId(Long teacherId);
 
     /**
      * Уменьшает lessonsRemaining на 1 для заданного студента.

@@ -7,5 +7,7 @@ public record StudentListDto(
         Integer lessonsRemaining,
         Boolean lowOnLessons,
         Long pkgId,
-        String pkgName
+        String pkgName,
+        Long teacherId,
+        String teacherName
 ) {}

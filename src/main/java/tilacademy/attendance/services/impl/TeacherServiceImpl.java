@@ -3,6 +3,7 @@ package tilacademy.attendance.services.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tilacademy.attendance.entities.Teacher;
+import tilacademy.attendance.entities.User;
 import tilacademy.attendance.repositories.TeacherRepository;
 import tilacademy.attendance.services.TeacherService;
 
@@ -28,9 +29,22 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.findById(id);
     }
 
-    @Override
-    public Teacher create(Teacher teacher) {
-        return teacherRepository.save(teacher);
+    @Transactional
+    public Teacher createTeacherForUser(User user, String firstName, String lastName, String email, String phone) {
+        // Не создаём, если уже существует
+        if (teacherRepository.findByUser_Id(user.getId()).isPresent()) {
+            throw new IllegalStateException("Teacher profile already exists for user " + user.getId());
+        }
+
+        Teacher t = Teacher.builder()
+                .user(user)           // MapsId возьмёт user.id в качестве teacher.id
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .phone(phone)
+                .build();
+
+        return teacherRepository.save(t);
     }
 
     @Override

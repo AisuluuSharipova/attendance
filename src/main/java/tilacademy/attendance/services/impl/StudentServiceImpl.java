@@ -56,6 +56,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> findByTeacherId(Long teacherId) {
+        return studentRepository.findByTeacherId(teacherId);
+    }
+
+
+    @Override
     @Transactional
     public Student consumeLesson(Long studentId) {
         Student s = studentRepository.findById(studentId)
